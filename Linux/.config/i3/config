@@ -1,0 +1,294 @@
+set $mod Mod4
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+font pango:Ubuntu Mono 14
+
+# Start XDG autostart .desktop files using dex. See also
+# https://wiki.archlinux.org/index.php/XDG_Autostart
+#exec --no-startup-id dex-autostart --autostart --environment i3
+
+# The combination of xss-lock, nm-applet and pactl is a popular choice, so
+# they are included here as an example. Modify as you see fit.
+
+# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
+# screen before suspend. Use loginctl lock-session to lock your screen.
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+
+# NetworkManager is the most popular way to manage wireless networks on Linux,
+# and nm-applet is a desktop environment-independent system tray GUI for it.
+exec --no-startup-id nm-applet
+
+# Use pactl to adjust volume in PulseAudio.
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# move tiling windows via drag & drop by left-clicking into the title bar,
+# or left-clicking anywhere into the window while holding the floating modifier.
+tiling_drag modifier titlebar
+focus_follows_mouse no
+focus_on_window_activation focus
+
+
+# reload the configuration file
+bindsym $mod+Shift+o reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+p restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# start a terminal
+bindsym $mod+Return exec gnome-terminal
+bindsym $mod+Shift+Return exec firefox
+bindsym $mod+Ctrl+Return exec nautilus
+
+# Record audio
+# bindsym $mod+m exec ~/scripts/record_audio.sh
+bindsym $mod+m exec ~/scripts/record_audio_output.sh
+
+# kill focued window
+bindsym Control+q kill
+
+# start dmenu (a program launcher)
+#bindsym Control+space exec --no-startup-id dmenu_run
+bindsym Control+space exec --no-startup-id rofi -show drun
+
+#### [WINDOW MANIPULATION]####
+# change focus
+bindsym $mod+Ctrl+a focus left
+bindsym $mod+Ctrl+s focus down
+bindsym $mod+Ctrl+w focus up
+bindsym $mod+Ctrl+d focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+a move left
+bindsym $mod+Shift+s move down
+bindsym $mod+Shift+w move up
+bindsym $mod+Shift+d move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+#bindsym $mod+d resize shrink width 10 px or 10 ppt
+#bindsym $mod+a resize grow width 10 px or 10 ppt
+#bindsym $mod+w resize grow height 10 px or 10 ppt
+#bindsym $mod+s resize shrink height 10 px or 10 ppt
+bindsym $mod+a exec ~/scripts/i3resize.sh left
+bindsym $mod+d exec ~/scripts/i3resize.sh right
+bindsym $mod+w exec ~/scripts/i3resize.sh up
+bindsym $mod+s exec ~/scripts/i3resize.sh down
+
+
+#### [TOGGLES]####
+# split in horizontal/vertical orientation (unnecessary when using autotiling)
+bindsym $mod+h split h
+bindsym $mod+n split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+Shift+h layout toggle split
+# bindsym $mod+s layout stacking
+# bindsym $mod+w layout tabbed
+
+# toggle tiling / floating
+bindsym $mod+space floating toggle
+
+# toggle gaps
+gaps inner 0
+gaps outer 0
+bindsym $mod+g exec ~/scripts/i3toggle_gaps.sh toggle
+
+
+# change focus between tiling / floating windows
+#bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+#bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# Define names for default workspaces for which we configure key bindings later on.
+# We use variables to avoid repeating the names in multiple places.
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# switch to workspace
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+bindsym $mod+Shift+1 workspace number $ws8
+bindsym $mod+Shift+2 workspace number $ws9
+
+# Focus different monitor
+bindsym $mod+t focus output right
+
+# move focused container to workspace
+bindsym $mod+Mod1+1 move container to workspace number $ws1 ; workspace number $ws1
+bindsym $mod+Mod1+2 move container to workspace number $ws2 ; workspace number $ws2
+bindsym $mod+Mod1+3 move container to workspace number $ws3 ; workspace number $ws3
+bindsym $mod+Mod1+4 move container to workspace number $ws4 ; workspace number $ws4
+bindsym $mod+Mod1+5 move container to workspace number $ws5 ; workspace number $ws5
+bindsym $mod+Mod1+6 move container to workspace number $ws6 ; workspace number $ws6
+bindsym $mod+Mod1+7 move container to workspace number $ws7 ; workspace number $ws7
+bindsym $mod+Mod1+8 move container to workspace number $ws8 ; workspace number $ws8
+bindsym $mod+Mod1+9 move container to workspace number $ws9 ; workspace number $ws9
+bindsym $mod+Mod1+0 move container to workspace number $ws10 ; workspace number $ws10
+
+# Fix workspaces
+bindsym $mod+q [class="firefox"] move to workspace number 2 ; [class="discord"] move to workspace number 3 ; [class="spotify"] move to workspace number 4 ; [class="Code"] move to workspace number 5 ;  [class="resolve"] move to workspace number 1 ; [class="obs"] move to workspace number 5 ;  [class="nautilus"] move to workspace number 5
+
+
+# Scratchpad
+# Make the currently focused window a scratchpad
+bindsym $mod+Escape move scratchpad
+
+# Show the first scratchpad window
+bindsym $mod+Tab scratchpad show
+
+# Keyboard shortcuts
+bindsym Mod1+Tab exec --no-startup-id "rofi -show window -show-icons"
+# Show windows of currently focused application (todo doesnt work)
+bindsym Mod1+q exec --no-startup-id "~/scripts/show_windows.sh"
+# Screenshots
+bindsym Ctrl+Shift+c exec "flameshot gui"
+bindsym Ctrl+Shift+g exec --no-startup-id "simplescreenrecorder"
+# Clipboard history
+bindsym $mod+v exec "copyq toggle"
+
+# Sleep
+bindsym $mod+shift+0 exec "systemctl suspend"
+
+# Shortcuts for switching between languages
+# fcitx5
+bindsym $mod+z exec "fcitx5-remote -s keyboard-ee && setxkbmap ee"
+bindsym $mod+x exec "fcitx5-remote -s keyboard-us && setxkbmap us"
+bindsym $mod+c exec "fcitx5-remote -s mozc"
+
+# IBUS
+#bindsym $mod+z exec "setxkbmap ee && ibus engine xkb:us:eng"
+#bindsym $mod+x exec "setxkbmap us && ibus engine xkb:us::eng"
+#bindsym $mod+c exec "ibus engine anthy"
+# ^Note, can change IME input mode with CTRL+J, alt+~, or from menu
+
+
+set $monitor_right "HDMI-0"
+set $monitor_left "DP-3"
+
+# Assign workspace to monitor
+workspace $ws1 output $monitor_right
+workspace $ws2 output $monitor_right
+workspace $ws3 output $monitor_right
+workspace $ws4 output $monitor_right
+workspace $ws5 output $monitor_right
+workspace $ws6 output $monitor_right
+workspace $ws7 output $monitor_right
+workspace $ws8 output $monitor_left
+workspace $ws9 output $monitor_left
+workspace $ws10 output $monitor_left
+
+# Set WS 1 to be floating
+for_window [workspace="1"] floating enable
+
+# Assign apps to workspaces:
+assign [class="firefox"] $ws2
+assign [class="discord"] $ws3
+assign [class="Spotify"] $ws4
+assign [class="Code"] $ws5
+assign [class="obs"] $ws5
+
+# App rules
+for_window [class="hl2_linux"] floating enable
+for_window [class="hdos-Main"] floating enable
+for_window [class="SimpleScreenRecorder"] floating enable
+for_window [class="copyq"] floating enable
+
+
+# BACKGROUND APPS
+exec_always --no-startup-id ~/scripts/polybar.sh &
+# For ibus to run:
+# exec_always --no-startup-id ibus-daemon -drx
+# For fcitx to run:
+exec --no-startup-id fcitx5 -d
+# Compositor
+exec_always --no-startup-id picom -b --config ~/.config/picom/picom.conf
+exec_always --no-startup-id dunst
+
+# Mouse settings
+# sudo nano /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
+# https://old.reddit.com/r/linux_gaming/comments/muksdx/same_mouse_sensitivity_as_windows_linux_feels/
+# basically need to use 0 accelspeed because libinput
+
+# Gnome themes (enable dark theme, todo doesn't work, at least for nautilus, calendar etc)
+# NOTES:
+# - gsettings are identical in both cases
+# - env variables are different but nothing related to "theme" "gnome" "dark" seems to be relevant
+# - processes are identical except for duplicate keyring when first log into gnome then i3
+# - playing around with the autostart of gsd-xsettings doesn't change themes
+# - discovered that when opening inspection in nautilus there is "Adwaita" and when I toggle system-supports-color-schemes
+# on then it finally works, but once inspector is closed it resets
+exec --no-startup-id /usr/libexec/gsd-xsettings
+
+# Monitors
+exec --no-startup-id autorandr -c work
+# Wallpapers
+exec --no-startup-id nitrogen --restore
+
+# Autostartup apps
+exec --no-startup-id firefox
+exec --no-startup-id code
+exec --no-startup-id discord
+exec --no-startup-id copyq
+
+### BORDERS ###
+# Window icon in titlebar
+for_window [all] title_window_icon on
+
+# Set default border style
+default_border pixel 1
+for_window [class="^.*"] border pixel 1
+
+# Set border colors
+client.focused              #6e6e6e #6e6e6e #6e6e6e #6e6e6e
+client.unfocused            #2e3440 #2e3440 #2e3440 #2e3440
+client.focused_inactive     #2e3440 #2e3440 #2e3440 #2e3440
+client.urgent               #bf616a #bf616a #bf616a #bf616a
+
+# Hide borders when only one window
+#hide_edge_borders smart
+smart_borders on
+
+# Set border radius (requires picom or a compositor that supports it)
+#for_window [class=".*"] border-radius 100px
