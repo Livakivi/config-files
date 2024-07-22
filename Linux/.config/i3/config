@@ -299,7 +299,7 @@ smart_borders on
 # INSTALL SCRIPTS:
 # Also, see: https://github.com/Livakivi/config-files/blob/main/Linux/autodl_i3_setup.sh
 # 1. Basic compatibility:
-# sudo dnf install i3 i3status dmenu i3lock conky rofi picom copyq polybar dunst flameshot nitrogen autorandr
+# sudo dnf install i3 i3status dmenu i3lock conky rofi picom copyq polybar dunst flameshot nitrogen autorandr xclip
 
 # Monitor: xrandr --output HDMI-0 --mode 3840x2160 --rate 160 && autorandr --save default
 # DPI for 4k: printf "Xft.dpi: 120" > ~/.Xresources
