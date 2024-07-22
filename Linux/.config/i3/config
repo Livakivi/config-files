@@ -295,25 +295,32 @@ smart_borders on
 #for_window [class=".*"] border-radius 100px
 
 
-
+# SET UP NOTES
 # INSTALL SCRIPTS:
 # Also, see: https://github.com/Livakivi/config-files/blob/main/Linux/autodl_i3_setup.sh
 # 1. Basic compatibility:
-# sudo dnf install i3 i3status dmenu i3lock conky rofi picom copyq polybar dunst flameshot nitrogen autorandr xclip
+# - sudo dnf install i3 i3status dmenu i3lock conky rofi picom copyq polybar dunst flameshot nitrogen autorandr xclip
 
-# Monitor: xrandr --output HDMI-0 --mode 3840x2160 --rate 160 && autorandr --save default
+
+# MONITOR CONFIG
+# - xrandr --output HDMI-0 --mode 3840x2160 --rate 160 && autorandr --save default
 # DPI for 4k: printf "Xft.dpi: 120" > ~/.Xresources
+# If using Gnome/GDM, you can apply Gnome display settings to GDM (to make the login screen the same refresh rate as your displays on Gnome)
+# - sudo cp ~/.config/monitors.xml /var/lib/gdm/.config/monitors.xml
+
 
 # 2. Commonly used software:
-# sudo dnf install discord vscode obs-studio
+# sudo dnf install obs-studio
 # (note: on Fedora 40, Discord can be installed as a flatpak from the Software app)
 # 2.1 vscode:
 # sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null &&  dnf check-update && sudo dnf install code
-# 2.2 Spotify flatpak
+# 2.2 Flatpaks
 # sudo dnf flatpak install flathub com.spotify.Client
+# sudo dnf flatpak install flathub com.discordapp.Discord
 
 # 4. If not already installed
 # sudo dnf install nautilus sushi
+# Fix Nautilus dark theme: mkdir $HOME/.config/xdg-desktop-portal && printf "[preferred]\ndefault=gtk;wlr" > $HOME/.config/xdg-desktop-portal/portals.conf
 
 # todo kb/language installation scripts
 # todo conda, alacritty, etc
