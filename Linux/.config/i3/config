@@ -104,6 +104,7 @@ bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+Shift+h layout toggle split
+bindsym $mod+j layout toggle stacked split
 # bindsym $mod+s layout stacking
 # bindsym $mod+w layout tabbed
 
@@ -119,11 +120,12 @@ bindsym $mod+g exec ~/scripts/i3toggle_gaps.sh toggle
 # change focus between tiling / floating windows
 #bindsym $mod+space focus mode_toggle
 
-# focus the parent container
+# focus the parent/child/next container
 #bindsym $mod+a focus parent
-
-# focus the child container
 #bindsym $mod+d focus child
+bindsym Mod1+Escape focus prev
+# I'd prefer alt+q to be a switch between windows of the same application across all spaces (todo)
+bindsym Mod1+q focus next
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -181,10 +183,10 @@ bindsym $mod+Tab scratchpad show
 # Keyboard shortcuts
 bindsym Mod1+Tab exec --no-startup-id "rofi -show window -show-icons"
 # Show windows of currently focused application (todo doesnt work)
-bindsym Mod1+q exec --no-startup-id "~/scripts/show_windows.sh"
+#bindsym Mod1+q exec --no-startup-id "~/scripts/show_windows.sh"
 # Screenshots
 bindsym Ctrl+Shift+c exec "flameshot gui"
-bindsym Ctrl+Shift+g exec --no-startup-id "simplescreenrecorder"
+#bindsym Ctrl+Shift+g exec --no-startup-id "simplescreenrecorder" todo get better screen recorder
 # Clipboard history
 bindsym $mod+v exec "copyq toggle"
 
@@ -248,9 +250,19 @@ exec_always --no-startup-id picom -b --config ~/.config/picom/picom.conf
 exec_always --no-startup-id dunst
 
 # Mouse settings
-# sudo vim /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
+# sudo nano /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
 # https://old.reddit.com/r/linux_gaming/comments/muksdx/same_mouse_sensitivity_as_windows_linux_feels/
 # basically need to use 0 accelspeed because libinput
+
+# Gnome themes (enable dark theme, todo doesn't work, at least for nautilus, calendar etc)
+# NOTES:
+# - gsettings are identical in both cases
+# - env variables are different but nothing related to "theme" "gnome" "dark" seems to be relevant
+# - processes are identical except for duplicate keyring when first log into gnome then i3
+# - playing around with the autostart of gsd-xsettings doesn't change themes
+# - discovered that when opening inspection in nautilus there is "Adwaita" and when I toggle system-supports-color-schemes
+# on then it finally works, but once inspector is closed it resets
+exec --no-startup-id /usr/libexec/gsd-xsettings
 
 # Monitors
 exec --no-startup-id autorandr -c default
@@ -294,7 +306,7 @@ smart_borders on
 
 # MONITOR CONFIG
 # - xrandr --output HDMI-0 --mode 3840x2160 --rate 160 && autorandr --save default
-# DPI for 4k: printf "Xft.dpi: 120" > ~/.Xresources
+# DPI for 4k: printf "Xft.dpi: 120" > ~/.Xresources && xrdb -merge ~/.Xresources
 # If using Gnome/GDM, you can apply Gnome display settings to GDM (to make the login screen the same refresh rate as your displays on Gnome)
 # - sudo cp ~/.config/monitors.xml /var/lib/gdm/.config/monitors.xml
 
