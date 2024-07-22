@@ -248,22 +248,12 @@ exec_always --no-startup-id picom -b --config ~/.config/picom/picom.conf
 exec_always --no-startup-id dunst
 
 # Mouse settings
-# sudo nano /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
+# sudo vim /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
 # https://old.reddit.com/r/linux_gaming/comments/muksdx/same_mouse_sensitivity_as_windows_linux_feels/
 # basically need to use 0 accelspeed because libinput
 
-# Gnome themes (enable dark theme, todo doesn't work, at least for nautilus, calendar etc)
-# NOTES:
-# - gsettings are identical in both cases
-# - env variables are different but nothing related to "theme" "gnome" "dark" seems to be relevant
-# - processes are identical except for duplicate keyring when first log into gnome then i3
-# - playing around with the autostart of gsd-xsettings doesn't change themes
-# - discovered that when opening inspection in nautilus there is "Adwaita" and when I toggle system-supports-color-schemes
-# on then it finally works, but once inspector is closed it resets
-exec --no-startup-id /usr/libexec/gsd-xsettings
-
 # Monitors
-exec --no-startup-id autorandr -c work
+exec --no-startup-id autorandr -c default
 # Wallpapers
 exec --no-startup-id nitrogen --restore
 
