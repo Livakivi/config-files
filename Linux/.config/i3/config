@@ -13,7 +13,7 @@ font pango:Ubuntu Mono 14
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork -i ~/Documents/wallpapers/TranscodedWallpaper.png
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -189,7 +189,8 @@ bindsym Ctrl+Shift+g exec --no-startup-id "simplescreenrecorder"
 bindsym $mod+v exec "copyq toggle"
 
 # Sleep
-bindsym $mod+shift+0 exec "systemctl suspend"
+bindsym $mod+shift+ctrl+0 exec "systemctl suspend"
+# note: systemctl hibernate to hibrinate, (suspend is sleep in windows terms?) but hibrinate is meant for mostly laptops, no real need for me to use it most of the time on desktop, can just shut down
 
 # Shortcuts for switching between languages
 # fcitx5
