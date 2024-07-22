@@ -10,7 +10,7 @@ git clone $repo_url $temp_dir
 # Move folders from the cloned repository to .config directory
 mv $temp_dir/Linux/.config/* ~/.config/
 mkdir -p ~/Documents/wallpapers
-mv $temp_dir/wallpapers/* ~/Documents/wallpapers/
+mv $temp_dir/Wallpapers/* ~/Documents/wallpapers/
 mkdir -p ~/scripts
 mv $temp_dir/Linux/scripts/* ~/scripts/
 chmod +x ~/scripts/*
