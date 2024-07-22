@@ -301,19 +301,19 @@ smart_borders on
 # 1. Basic compatibility:
 # sudo dnf install i3 i3status dmenu i3lock conky rofi picom copyq polybar dunst flameshot nitrogen autorandr
 
+# Monitor: xrandr --output HDMI-0 --mode 3840x2160 --rate 160 && autorandr --save default
+# DPI for 4k: printf "Xft.dpi: 120" > ~/.Xresources
+
 # 2. Commonly used software:
-# sudo dnf install discord vscode
+# sudo dnf install discord vscode obs-studio
 # 2.1 vscode:
 # sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null &&  dnf check-update && sudo dnf install code
-
-# 3. Flatpaks
+# 2.2 Spotify flatpak
 # sudo dnf flatpak install flathub com.spotify.Client
 
 # 4. If not already installed
 # sudo dnf install nautilus sushi
-# Monitor: xrandr --output HDMI-0 --mode 3840x2160 --rate 160 && autorandr --save default
-# DPI for 4k: printf "Xft.dpi: 120" > ~/.Xresources
 
-# todo language installation scripts
+# todo kb/language installation scripts
 # todo conda, alacritty, etc
-
+# todo anki, etc
