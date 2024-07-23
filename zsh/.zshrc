@@ -12,3 +12,6 @@ bindkey '^[[1;9C' end-of-line
 
 # Add alacritty to path (macOS)
 #export PATH=$PATH:/Applications/Alacritty.app/Contents/MacOS/
+
+# Add plugins
+#source ~/.local/share/zsh/plugins/zsh-shift-select/zsh-shift-select.plugin.zsh
