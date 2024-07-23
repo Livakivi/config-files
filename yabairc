@@ -50,4 +50,4 @@ yabai -m config mouse_action1 move
 yabai -m config mouse_action2 resize
 
 # Set all windows layer to normal so non managed windows wouldnt be always on top https://github.com/koekeishiya/yabai/issues/1912
-yabai -m rule --add app=".*" layer=normal
+yabai -m rule --add app=".*" sub-layer=normal
