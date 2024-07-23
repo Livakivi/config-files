@@ -8,55 +8,46 @@ yabai -m space 2 --label web
 yabai -m space 3 --label chat
 yabai -m space 4 --label music
 yabai -m space 5 --label editors
-yabai -m space 6 --label immersion
-yabai -m space 7 --label anki
-yabai -m space 8 --label terminal
 
-yabai -m rule --add app="^DaVinci Resolve$" space=main
-yabai -m rule --add app="^Firefox$" space=web
-yabai -m rule --add app="^Discord$" space=chat
-yabai -m rule --add app="^Spotify$" space=music
-yabai -m rule --add app="^Visual Studio Code$" space=editors
-yabai -m rule --add app="^Google Chrome$" space=immersion
-yabai -m rule --add app="^Anki$" space=anki
-yabai -m rule --add app="^terminal$" space=terminal
+yabai -m rule --add app="^DaVinci Resolve$" space=1
+#yabai -m rule --add app="^Firefox$" space=2
+#yabai -m rule --add app="^Safari$" space=2
+yabai -m rule --add app="^Discord$" space=3
+yabai -m rule --add app="^Spotify$" space=4
+yabai -m rule --add app="^Visual Studio Code$" space=5
 
 
 # Window rules
-yabai -m rule --add app="^(Calculator|System Preferences|System Settings|Archive Utility|Finder)$" manage=off
-# Anki card preview
-yabai -m rule --add title="^Preview" manage=off
+yabai -m rule --add app="^(Calculator|System Preferences|System Settings|Archive Utility)$" manage=off
 yabai -m rule --add title="^Preferences" manage=off
 yabai -m rule --add title="^Settings" manage=off
-yabai -m rule --add app="^DaVinci Resolve$" manage=off
 yabai -m rule --add app="^Steam$" manage=off
-yabai -m rule --add app="^CrossOver$" manage=off
-yabai -m rule --add app="^League of Legends$" manage=off
 yabai -m rule --add app="^Notes$" manage=off
 yabai -m rule --add app="^QuickTime Player$" manage=off
-yabai -m rule --add app="^League of Legends$" manage=off
 yabai -m rule --add app="^Numi$" manage=off
 yabai -m rule --add app="^Kawa$" manage=off
 yabai -m rule --add app="^Weather$" manage=off
+# Anki card preview & Anki browser
+yabai -m rule --add title="^Preview" manage=off
+yabai -m rule --add title="^Anki" manage=off
+yabai -m rule --add title="^Browse" manage=off
 
 
 # Set all padding and gaps to 20pt (default: 0)
-# yabai -m config top_padding    0
-# yabai -m config bottom_padding 0
-# yabai -m config left_padding   0
-# yabai -m config right_padding  0
+#yabai -m config top_padding    6
+#yabai -m config bottom_padding 6
+#yabai -m config left_padding   6
+#yabai -m config right_padding  6
 yabai -m config window_gap     12
 
 # Useful optional stuff
 yabai -m config focus_follows_mouse autofocus
 yabai -m config window_shadow float
-yabai -m config window_border_width 1
-yabai -m config active_window_border_color  0xBF999999
-# yabai -m config window_opacity on
-# yabai -m config normal_window_opacity 0.9
-
 
 # Drag/resizes Windows with mouse without having to grab the edges first by holding ctrl
 yabai -m config mouse_modifier ctrl
 yabai -m config mouse_action1 move
 yabai -m config mouse_action2 resize
+
+# Set all windows layer to normal so non managed windows wouldnt be always on top https://github.com/koekeishiya/yabai/issues/1912
+yabai -m rule --add app=".*" layer=normal
