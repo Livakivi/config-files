@@ -1,0 +1,27 @@
+import = [
+   "~/.config/alacritty/themes/themes/monokai_charcoal.toml",
+   #"~/.config/alacritty/themes/themes/coolnight.toml",
+   #"~/.config/alacritty/themes/themes/ubuntu.toml",
+]
+
+[window]
+padding.x = 16
+padding.y = 16
+decorations = "Buttonless"
+opacity = 0.7
+blur = true
+option_as_alt = "Both"
+
+[font]
+normal.family = "MesloLGS Nerd Font Mono"
+size = 18
+
+[keyboard]
+bindings = [
+    # Remap ctrl+c/x/z to use cmd/etc on macOS to avoid
+    # conflicts with other shortcuts like Kawa's language switching
+    { key = "Back", mods = "Command", chars = "\u0015" },
+    { key = "C", mods = "Alt|Command|Shift", chars = "\u0003" },
+    { key = "X", mods = "Command", chars = "\u0018" },
+    { key = "Z", mods = "Command", chars = "\u001f" }
+]
