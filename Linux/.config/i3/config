@@ -1,8 +1,8 @@
 set $mod Mod4
 
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
-font pango:Ubuntu Mono 14
+# Font for window titles. Will also be used by the bar unless a different font is used in the bar {} block below.
+# Font size 0 to make the titlebar in stacked mode as thin as possible (wish there was no border at all but seems to be impossible because i3 is not that customizable)
+font pango:Ubuntu Mono 0
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
@@ -35,13 +35,24 @@ tiling_drag modifier titlebar
 focus_follows_mouse no
 focus_on_window_activation focus
 
-
 # reload the configuration file
 bindsym $mod+Shift+o reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+p restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+# Exit directly
+bindsym $mod+Shift+Control+9 exec "i3-msg exit"
+# Sleep
+bindsym $mod+shift+ctrl+0 exec "systemctl suspend"
+# "systemctl hibernate" to hibrinate (suspend is sleep in windows terms, hibrinate is meant for mostly laptops when closing the lid, no real need for me to use it most of the time on desktop, can just shut down).
+
+# When changing monitor input source or restarting the monitor, for some reason i3
+# doesn't restore the monitor and the monitor says "No signal". After re-applying the monitor
+# config w/xrandr, its stuck in 29.97hz, but, if I power on/off the monitor after that,
+# I can set it to 160hz again (need to pkill picom every time though). This also happens on
+# Wayland/Gnome, but there, don't need to use xrandr, but just restart the monitor for 160hz.
+bindsym $mod+shift+ctrl+8 exec "autorandr -c default && pkill picom"
 
 # start a terminal
 bindsym $mod+Return exec gnome-terminal
@@ -49,14 +60,12 @@ bindsym $mod+Shift+Return exec firefox
 bindsym $mod+Ctrl+Return exec nautilus
 
 # Record audio
-# bindsym $mod+m exec ~/scripts/record_audio.sh
 bindsym $mod+m exec ~/scripts/record_audio_output.sh
 
 # kill focued window
 bindsym Control+q kill
 
 # start dmenu (a program launcher)
-#bindsym Control+space exec --no-startup-id dmenu_run
 bindsym Control+space exec --no-startup-id rofi -show drun
 
 #### [WINDOW MANIPULATION]####
@@ -154,6 +163,10 @@ bindsym $mod+0 workspace number $ws10
 bindsym $mod+Shift+1 workspace number $ws8
 bindsym $mod+Shift+2 workspace number $ws9
 
+# Scrollwheel workspace switching
+bindsym --whole-window $mod+button4 workspace next_on_output
+bindsym --whole-window $mod+button5 workspace prev_on_output
+
 # Focus different monitor
 bindsym $mod+t focus output right
 
@@ -190,9 +203,6 @@ bindsym Ctrl+Shift+c exec "flameshot gui"
 # Clipboard history
 bindsym $mod+v exec "copyq toggle"
 
-# Sleep
-bindsym $mod+shift+ctrl+0 exec "systemctl suspend"
-# note: systemctl hibernate to hibrinate, (suspend is sleep in windows terms?) but hibrinate is meant for mostly laptops, no real need for me to use it most of the time on desktop, can just shut down
 
 # Shortcuts for switching between languages
 # fcitx5
@@ -254,14 +264,7 @@ exec_always --no-startup-id dunst
 # https://old.reddit.com/r/linux_gaming/comments/muksdx/same_mouse_sensitivity_as_windows_linux_feels/
 # basically need to use 0 accelspeed because libinput
 
-# Gnome themes (enable dark theme, todo doesn't work, at least for nautilus, calendar etc)
-# NOTES:
-# - gsettings are identical in both cases
-# - env variables are different but nothing related to "theme" "gnome" "dark" seems to be relevant
-# - processes are identical except for duplicate keyring when first log into gnome then i3
-# - playing around with the autostart of gsd-xsettings doesn't change themes
-# - discovered that when opening inspection in nautilus there is "Adwaita" and when I toggle system-supports-color-schemes
-# on then it finally works, but once inspector is closed it resets
+# Gnome theming
 exec --no-startup-id /usr/libexec/gsd-xsettings
 
 # Monitors
@@ -277,13 +280,15 @@ exec --no-startup-id copyq
 
 ### BORDERS ###
 # Window icon in titlebar
-for_window [all] title_window_icon on
+for_window [all] title_window_icon off
 
 # Set default border style
 default_border pixel 1
-for_window [class="^.*"] border pixel 1
+# for_window [class="^.*"] border pixel 1
+for_window [floating] border none
 
 # Set border colors
+# class                     border  backgr. text    indicator child_border
 client.focused              #6e6e6e #6e6e6e #6e6e6e #6e6e6e
 client.unfocused            #2e3440 #2e3440 #2e3440 #2e3440
 client.focused_inactive     #2e3440 #2e3440 #2e3440 #2e3440
@@ -305,14 +310,16 @@ smart_borders on
 
 
 # MONITOR CONFIG
-# - xrandr --output HDMI-0 --mode 3840x2160 --rate 160 && autorandr --save default
-# DPI for 4k: printf "Xft.dpi: 120" > ~/.Xresources && xrdb -merge ~/.Xresources
+# - xrandr --output HDMI-0 --mode 3840x2160 --rate 160 --dpi 120 && autorandr --save default
+# DPI for 4k: printf "Xft.dpi: 120" > ~/.Xresources && xrdb -merge ~/.Xresources https://unix.stackexchange.com/a/413238
+# note, the above^ automatically scaled everything on Nobara 40 with the official (kde) variant, but on gnome fedora40, needed to do gsettings set org.gnome.desktop.interface text-scaling-factor 1.25
+# not sure if it works exactly the same way or not.
+
 # If using Gnome/GDM, you can apply Gnome display settings to GDM (to make the login screen the same refresh rate as your displays on Gnome)
 # - sudo cp ~/.config/monitors.xml /var/lib/gdm/.config/monitors.xml
 
-
 # 2. Commonly used software:
-# sudo dnf install obs-studio
+# sudo dnf install obs-studio kde-connect mpv
 # (note: on Fedora 40, Discord can be installed as a flatpak from the Software app)
 # 2.1 vscode:
 # sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null &&  dnf check-update && sudo dnf install code
@@ -327,3 +334,7 @@ smart_borders on
 # todo kb/language installation scripts
 # todo conda, alacritty, etc
 # todo anki, etc
+
+# Bluetooth (fedora 40): 
+#bluetoothctl list
+#bluetoothctl connect F2:4F:D2:11:(etc)
