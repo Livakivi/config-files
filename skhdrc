@@ -128,4 +128,4 @@ ctrl + alt + cmd - r : yabai --restart-service
 ctrl + alt + cmd - l : yt-dlp "$(pbpaste)" -o "~/Downloads/%(title)s.%(ext)s" --extract-audio
 
 # Shortcut to start/stop recording system audio, save it to /Downloads, copy path to clipboard
-ctrl - m : fname=~/Downloads/a_$(date +'%y%m%d-%H%M%S').wav && if pgrep -x "sox"; then pkill sox && osascript -e "display notification \"$fname\" with title \"Stopped audio recording\""; else  osascript -e "display notification \"$fname\" with title \"Started audio recording\"" && sox -t coreaudio "BlackHole 2ch" "$fname" && echo "$fname" | pbcopy; fi
+ctrl - m : fname=~/Downloads/a_$(date +'%y%m%d-%H%M%S').wav && if pgrep -x "sox"; then pkill sox && osascript -e "display notification \"$fname\" with title \"Stopped audio recording\""; else  osascript -e "display notification \"$fname\" with title \"Started audio recording\"" && sox -t coreaudio "BlackHole 2ch" "$fname" && echo "file://$fname" | pbcopy; fi
