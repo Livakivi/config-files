@@ -1,0 +1,88 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# npm/conda related
+export PATH=/opt/miniconda3/bin:$PATH
+export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1
+export NODE_OPTIONS=--openssl-legacy-provider
+
+# Default terminal shortcut for using in other commands
+export TERMINAL='alacritty'
+
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=10000
+SAVEHIST=10000
+bindkey -e
+
+# alt arrow key word jumping
+bindkey '^[[1;3C' forward-word
+bindkey '^[[1;3D' backward-word
+bindkey '^[[1;9D' beginning-of-line
+bindkey '^[[1;9C' end-of-line
+bindkey '^[[1;5D' beginning-of-line
+bindkey '^[[1;5C' end-of-line
+
+
+
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/liva/.zshrc'
+
+autoload -Uz compinit
+compinit
+
+# Shift select plugin
+source ~/scripts/zsh-shift-select.plugin.zsh
+
+# End of lines added by compinstall
+source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export QT_STYLE_OVERRIDE=Adwaita-Dark
+export GTK2_RC_FILES=/usr/share/themes/Adwaita-dark/gtk-2.0/gtkrc
+export GTK_THEME=Adwaita:dark
+
+export GTK_IM_MODULE='fcitx'
+export QT_IM_MODULE='fcitx'
+export SDL_IM_MODULE='fcitx'
+export XMODIFIERS='@im=fcitx'
+
+
+# alias cv='for i in *.mp4; do ffmpeg -i "$i" -map 0:2 -vn -acodec flac "${i%.*}.flac"; done'
+alias cv='for i in *.mp4; do ffmpeg -i "$i" -map 0:2 -vn -acodec mp3 "${i%.*}.mp3"; done'
+
+alias ssh1=
+alias back=
+alias front=
+alias tasks=
+alias mig=
+alias mmig=
+alias mmmig=
+alias shell=
+alias ngs=
+alias rns=
+
+
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/opt/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+conda activate base
