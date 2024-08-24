@@ -2,7 +2,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font is used in the bar {} block below.
 # Font size 0 to make the titlebar in stacked mode as thin as possible (wish there was no border at all but seems to be impossible because i3 is not that customizable)
-font pango:Ubuntu Mono 0
+font pango:DejaVu Sans Mono 13
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
@@ -18,6 +18,8 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork -i ~/Docu
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
+# Popup prompt for asking password
+exec --no-startup-id /usr/lib/polkit-kde-authentication-agent-1
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -28,6 +30,7 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
+# floating_modifier button2
 
 # move tiling windows via drag & drop by left-clicking into the title bar,
 # or left-clicking anywhere into the window while holding the floating modifier.
@@ -55,18 +58,23 @@ bindsym $mod+shift+ctrl+0 exec "systemctl suspend"
 bindsym $mod+shift+ctrl+8 exec "autorandr -c default && pkill picom"
 
 # start a terminal
-bindsym $mod+Return exec gnome-terminal
+bindsym $mod+Return exec alacritty
 bindsym $mod+Shift+Return exec firefox
 bindsym $mod+Ctrl+Return exec nautilus
 
 # Record audio
 bindsym $mod+m exec ~/scripts/record_audio_output.sh
 
+# Download song from clipboard to Downloads
+bindsym $mod+Ctrl+l exec yt-dlp "$(xclip -o -sel clipboard)" -o "~/Downloads/%(title)s.%(ext)s" --extract-audio
+
+
 # kill focued window
 bindsym Control+q kill
 
 # start dmenu (a program launcher)
-bindsym Control+space exec --no-startup-id rofi -show drun
+# bindsym Control+space exec --no-startup-id rofi -show drun
+bindsym Control+space exec ulauncher-toggle
 
 #### [WINDOW MANIPULATION]####
 # change focus
@@ -86,6 +94,8 @@ bindsym $mod+Shift+a move left
 bindsym $mod+Shift+s move down
 bindsym $mod+Shift+w move up
 bindsym $mod+Shift+d move right
+bindsym $mod+q move left 
+bindsym $mod+e move right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -103,10 +113,14 @@ bindsym $mod+w exec ~/scripts/i3resize.sh up
 bindsym $mod+s exec ~/scripts/i3resize.sh down
 
 
-#### [TOGGLES]####
 # split in horizontal/vertical orientation (unnecessary when using autotiling)
-bindsym $mod+h split h
-bindsym $mod+n split v
+bindsym $mod+bracketleft split v
+bindsym $mod+bracketright split h
+
+#toggle split direction for each window
+default_orientation vertical
+for_window [class="^"] split toggle
+
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
@@ -118,12 +132,14 @@ bindsym $mod+j layout toggle stacked split
 # bindsym $mod+w layout tabbed
 
 # toggle tiling / floating
-bindsym $mod+space floating toggle
+# bindsym $mod+space floating toggle
+bindsym $mod+space floating toggle; [tiling] border pixel 2; [floating] border normal 2
 
 # toggle gaps
 gaps inner 0
 gaps outer 0
 bindsym $mod+g exec ~/scripts/i3toggle_gaps.sh toggle
+
 
 
 # change focus between tiling / floating windows
@@ -160,8 +176,8 @@ bindsym $mod+7 workspace number $ws7
 bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
-bindsym $mod+Shift+1 workspace number $ws8
-bindsym $mod+Shift+2 workspace number $ws9
+# bindsym $mod+Shift+1 workspace number $ws8
+# bindsym $mod+Shift+2 workspace number $ws9
 
 # Scrollwheel workspace switching
 bindsym --whole-window $mod+button4 workspace next_on_output
@@ -182,8 +198,19 @@ bindsym $mod+Mod1+8 move container to workspace number $ws8 ; workspace number $
 bindsym $mod+Mod1+9 move container to workspace number $ws9 ; workspace number $ws9
 bindsym $mod+Mod1+0 move container to workspace number $ws10 ; workspace number $ws10
 
+bindsym $mod+Shift+1 move container to workspace number $ws1 ; workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2 ; workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3 ; workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4 ; workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5 ; workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6 ; workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7 ; workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8 ; workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9 ; workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10 ; workspace number $ws10
+
 # Fix workspaces
-bindsym $mod+q [class="firefox"] move to workspace number 2 ; [class="discord"] move to workspace number 3 ; [class="spotify"] move to workspace number 4 ; [class="Code"] move to workspace number 5 ;  [class="resolve"] move to workspace number 1 ; [class="obs"] move to workspace number 5 ;  [class="nautilus"] move to workspace number 5
+bindsym $mod+shift+q [class="firefox"] move to workspace number 2 ; [class="discord"] move to workspace number 3 ; [class="spotify"] move to workspace number 4 ; [class="Code"] move to workspace number 5 ;  [class="resolve"] move to workspace number 1 ; [class="obs"] move to workspace number 5 ;  [class="nautilus"] move to workspace number 5
 
 
 # Scratchpad
@@ -194,7 +221,8 @@ bindsym $mod+Escape move scratchpad
 bindsym $mod+Tab scratchpad show
 
 # Keyboard shortcuts
-bindsym Mod1+Tab exec --no-startup-id "rofi -show window -show-icons"
+# bindsym Mod1+Tab exec --no-startup-id "rofi -show window -show-icons"
+
 # Show windows of currently focused application (todo doesnt work)
 #bindsym Mod1+q exec --no-startup-id "~/scripts/show_windows.sh"
 # Screenshots
@@ -202,6 +230,9 @@ bindsym Ctrl+Shift+c exec "flameshot gui"
 #bindsym Ctrl+Shift+g exec --no-startup-id "simplescreenrecorder" todo get better screen recorder
 # Clipboard history
 bindsym $mod+v exec "copyq toggle"
+
+# Screen color picker (just use shareX through steam or wine or sth instead)
+# bindsym Ctrl+Shift+u exec "xcolor"
 
 
 # Shortcuts for switching between languages
@@ -216,9 +247,8 @@ bindsym $mod+c exec "fcitx5-remote -s mozc"
 #bindsym $mod+c exec "ibus engine anthy"
 # ^Note, can change IME input mode with CTRL+J, alt+~, or from menu
 
-
-set $monitor_right "HDMI-0"
-set $monitor_left "DP-3"
+set $monitor_right "DP-0"
+set $monitor_left "HDMI-0"
 
 # Assign workspace to monitor
 workspace $ws1 output $monitor_right
@@ -226,8 +256,8 @@ workspace $ws2 output $monitor_right
 workspace $ws3 output $monitor_right
 workspace $ws4 output $monitor_right
 workspace $ws5 output $monitor_right
-workspace $ws6 output $monitor_right
-workspace $ws7 output $monitor_right
+workspace $ws6 output $monitor_left
+workspace $ws7 output $monitor_left
 workspace $ws8 output $monitor_left
 workspace $ws9 output $monitor_left
 workspace $ws10 output $monitor_left
@@ -236,7 +266,7 @@ workspace $ws10 output $monitor_left
 for_window [workspace="1"] floating enable
 
 # Assign apps to workspaces:
-assign [class="firefox"] $ws2
+# assign [class="firefox"] $ws2
 assign [class="discord"] $ws3
 assign [class="Spotify"] $ws4
 assign [class="Code"] $ws5
@@ -250,14 +280,12 @@ for_window [class="copyq"] floating enable
 
 
 # BACKGROUND APPS
-exec_always --no-startup-id ~/scripts/polybar.sh &
-# For ibus to run:
-# exec_always --no-startup-id ibus-daemon -drx
-# For fcitx to run:
+# exec_always --no-startup-id ~/scripts/polybar.sh &
+exec --no-startup-id tint2
 exec --no-startup-id fcitx5 -d
-# Compositor
 exec_always --no-startup-id picom -b --config ~/.config/picom/picom.conf
 exec_always --no-startup-id dunst
+exec_always --no-startup-id alttab -fg "white" -bg "#000000" -frame "#FFA500" -t 200x150 -i 200x80 -d 1
 
 # Mouse settings
 # sudo nano /etc/X11/xorg.conf.d/50-mouse-acceleration.conf
@@ -269,30 +297,37 @@ exec --no-startup-id /usr/libexec/gsd-xsettings
 
 # Monitors
 exec --no-startup-id autorandr -c default
-# Wallpapers
-exec --no-startup-id nitrogen --restore
 
 # Autostartup apps
 exec --no-startup-id firefox
 exec --no-startup-id code
 exec --no-startup-id discord
 exec --no-startup-id copyq
+exec --no-startup-id i3-autolayout autolayout
+
+# Wallpapers
+# exec --no-startup-id nitrogen --restore
+# exec --no-startup-id feh --bg-fill --randomize ~/Documents/wallpapers/*
+exec --no-startup-id feh --bg-fill feh --bg-fill ~/Documents/wallpapers/windows-11-dark-mode-blue-stock-official-3840x2160-5630.jpg
 
 ### BORDERS ###
 # Window icon in titlebar
-for_window [all] title_window_icon off
+# for_window [all] title_window_icon off
+for_window [floating] title_window_icon on
 
 # Set default border style
-default_border pixel 1
+default_border pixel 2
+# for_window [tiling] border pixel 2
+# for_window [floating] border normal 2
 # for_window [class="^.*"] border pixel 1
-for_window [floating] border none
+# for_window [floating] %^border none
 
 # Set border colors
 # class                     border  backgr. text    indicator child_border
-client.focused              #6e6e6e #6e6e6e #6e6e6e #6e6e6e
-client.unfocused            #2e3440 #2e3440 #2e3440 #2e3440
-client.focused_inactive     #2e3440 #2e3440 #2e3440 #2e3440
-client.urgent               #bf616a #bf616a #bf616a #bf616a
+client.focused              #6e6e6e #6e6e6e #ffffff #886e6e
+client.unfocused            #2e3440 #2e3440 #808080 #2e3440
+client.focused_inactive     #2e3440 #2e3440 #808080 #2e3440
+client.urgent               #bf616a #bf616a #ffffff #bf616a
 
 # Hide borders when only one window
 #hide_edge_borders smart
@@ -301,7 +336,7 @@ smart_borders on
 # Set border radius (requires picom or a compositor that supports it)
 #for_window [class=".*"] border-radius 100px
 
-
+######################
 # SET UP NOTES
 # INSTALL SCRIPTS:
 # Also, see: https://github.com/Livakivi/config-files/blob/main/Linux/autodl_i3_setup.sh
@@ -310,7 +345,11 @@ smart_borders on
 
 
 # MONITOR CONFIG
-# - xrandr --output HDMI-0 --mode 3840x2160 --rate 160 --dpi 120 && autorandr --save default
+# xrandr --output DP-0 --mode 3840x2160 --rate 160
+# xrandr --output HDMI-0 --mode 3840x2160 --rate 160
+# autorandr --save default --force
+# Configure position with arandr
+
 # DPI for 4k: printf "Xft.dpi: 120" > ~/.Xresources && xrdb -merge ~/.Xresources https://unix.stackexchange.com/a/413238
 # note, the above^ automatically scaled everything on Nobara 40 with the official (kde) variant, but on gnome fedora40, needed to do gsettings set org.gnome.desktop.interface text-scaling-factor 1.25
 # not sure if it works exactly the same way or not.
@@ -323,18 +362,34 @@ smart_borders on
 # (note: on Fedora 40, Discord can be installed as a flatpak from the Software app)
 # 2.1 vscode:
 # sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc && echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null &&  dnf check-update && sudo dnf install code
+
 # 2.2 Flatpaks
 # sudo dnf flatpak install flathub com.spotify.Client
 # sudo dnf flatpak install flathub com.discordapp.Discord
+# flatpak override --user --filesystem=home:ro com.discordapp.Discord // Allow drag and drop of files in discord flatpak
 
 # 4. If not already installed
 # sudo dnf install nautilus sushi
 # Fix Nautilus dark theme: mkdir $HOME/.config/xdg-desktop-portal && printf "[preferred]\ndefault=gtk;wlr" > $HOME/.config/xdg-desktop-portal/portals.conf
 
-# todo kb/language installation scripts
+# Keyboard language layouts:
+# paru -S fcitx5-mozc-ut
+# sudo pacman -S fcitx5-qt fcitx5-gtk fxitx5-config-qt
+# paru -S adobe-source-han-sans-jp-fonts adobe-source-han-serif-jp-fonts
+# (add layouts like ee/mozc via fcitx5-configtool)
+# Add these to .zshrc
+# export GTK_IM_MODULE='fcitx'
+# export QT_IM_MODULE='fcitx'
+# export SDL_IM_MODULE='fcitx'
+# export XMODIFIERS='@im=fcitx'
+
 # todo conda, alacritty, etc
 # todo anki, etc
 
 # Bluetooth (fedora 40): 
 #bluetoothctl list
 #bluetoothctl connect F2:4F:D2:11:(etc)
+
+# ARCH
+# ffmpegthumbnailer: Nautilus video thumbnails
+# pacman -S ffmpegthumbnailer flatpak
